@@ -1,11 +1,12 @@
 package root.launcher;
 
-import root.connection_pool.ConnectionPool;
 
+import root.connection_pool.ConnectionPool;
 import root.connection_pool.exception.ConnectionPoolException;
 
 import java.sql.*;
-import java.util.*;
+import java.util.Map;
+import java.util.Set;
 
 import static root.launcher.ResourceManager.QUERIES;
 
@@ -23,11 +24,12 @@ public class Main {
         Map<String, PreparedStatement> statementsMap = null;
         ResultSet resultSet = null;
         try {
-            connection = ConnectionPool.getInstanse().takeConnection();
+            connection = ConnectionPool.getInstance().takeConnection();
             Set<String> set3 = QUERIES.keySet();
             for (String key : set3) {
                 if (key.contains(".byId.")) {
                     int testedUserId = 1;
+
                     String statementString = QUERIES.getString(key);
                     ConsoleHelper.writeMessage(QUERY);
                     ConsoleHelper.writeMessage(statementString);
@@ -40,9 +42,9 @@ public class Main {
                 }
             }
         } catch (ConnectionPoolException e) {
-            ConsoleHelper.writeMessage("Unexpexted ConnectionPoolException : " + e);
+            ConsoleHelper.writeMessage("Unexpected ConnectionPoolException : " + e);
         } catch (SQLException e) {
-            ConsoleHelper.writeMessage("Unexpexted SQLException : " + e);
+            ConsoleHelper.writeMessage("Unexpected SQLException : " + e);
 
         } finally {
             closeResultSet(resultSet);
